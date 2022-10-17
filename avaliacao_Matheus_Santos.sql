@@ -1,3 +1,5 @@
+#cria tabelas
+
 create table empresas(
 	id int primary key auto_increment,
     nome varchar(45),
@@ -57,7 +59,11 @@ create table passageiros_viagens(
     viagem_id int references viagens(id),
     constraint primary key (passageiro_id,viagem_id)
     );
-    
+
+
+
+
+# cria os views com inner join
 create view viagem_condutor_rota as
 Select v.id as id, v.partida as partida, c.nome as condutor, r.nome as rota
 	from viagens v 
@@ -114,6 +120,7 @@ r.nome as rota, count(distinct es.id) as numero_estacoes, e.nome as empresa, c.n
 	group by v.id
     order by v.id asc;
 
+# cria o view com left join
 create view num_contratos as
 Select e.nome, count(c.id) from empresas e 
 	left join condutores c
@@ -123,6 +130,7 @@ Select e.nome, count(c.id) from empresas e
 
 delimiter $$    
 
+# cria os triggrers
 create trigger tgr_inserir_empresa after insert
 on empresas
 for each row
@@ -173,6 +181,7 @@ end $$
 
 delimiter ;
 
+# insere os dados nas primeiras tabelas
 insert into empresas(nome, cnpj) values ('Chaminé','00.111.111/0001-11'),
 	('Sertão','01.111.111/0001-11'),
     ('Donzela de Ferro','02.111.111/0001-11'),
@@ -269,6 +278,8 @@ insert into rotas(nome) values ('Vale de ferro'),
 update rotas set nome = 'Caminho da Boiada' where nome = 'Caminho do Ouro';
 
 delete from rotas where nome = 'A deletar'; 
+
+# insere os dados das ultimas tabelas usando procedures
 
 delimiter $$
 
